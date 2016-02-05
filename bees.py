@@ -101,8 +101,8 @@ sess.run(tf.initialize_all_variables())
 
 
 #### Random rotated and train 
-#for i in range(2501):   Epochs/iterations
-for i in range(10):
+for i in range(2501):  # Epochs/iterations
+#for i in range(10):
     batch_rows = sample(training_rows, 50)
     X_training = np.concatenate([arr[np.newaxis] for arr in \
                                  bees.images.loc[batch_rows].apply(lambda x: rotate(x, choice([0,90,180,270]))/256.)])
