@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pprint
 
 bees = pd.read_csv('bees/train_labels.csv')
 bees = bees.reindex(np.random.permutation(bees.index))
@@ -8,15 +9,25 @@ print len(bees), len(bees[bees.genus==1]), len(bees[bees.genus==0])
 
 from scipy.ndimage import imread
 from scipy.misc import imresize
+#print bees.id
 
+
+waka = imread('bees.orig/images/train/3246.jpg')
+print waka.shape
+print waka
+print "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+waka = imread('bees/images/train/100.jpg')
+print waka.shape
+print waka
+
+#bees['images'] = [imresize(imread('bees/images/train/'+str(bee)+'.jpg'),
+ #                          (100, 100))[:, :, :3] for bee in bees.id]
 bees['images'] = [imresize(imread('bees/images/train/'+str(bee)+'.jpg'),
-                           (100, 100))[:, :, :3] for bee in bees.id]
+                           (100, 100))[:, :, ] for bee in bees.id]
+#bees['images'] = [imresize(imread('bees/images/train/'+str(bee)+'.jpg'),
+#                           (100, 100))[:1] for bee in bees.id]
 
-from scipy.ndimage import imread
-from scipy.misc import imresize
-
-bees['images'] = [imresize(imread('bees/images/train/'+str(bee)+'.jpg'),
-                           (100, 100))[:, :, :3] for bee in bees.id]
+#bees['images'] = [print('waka'+str(bee)+'.jpg') for bee in bees.id]
 
 #import matplotlib.pyplot as plt
 #%matplotlib inline
@@ -51,7 +62,9 @@ def max_pool_2x2(x):
                         strides=[1, 2, 2, 1], padding='SAME')
 
 
-x = tf.placeholder(tf.float32, [None, 100, 100, 3])
+#x = tf.placeholder(tf.float32, [None, 100, 100, 3])
+x = tf.placeholder(tf.float32, [50, 100, 100, 4])
+#x = tf.placeholder(tf.float32, [None, 100, 100, 4])
 y_ = tf.placeholder(tf.float32, [None, 2])
 
 W_conv1 = weight_variable([5, 5, 3, 32])
@@ -88,8 +101,10 @@ from scipy.ndimage.interpolation import rotate
 
 y_true = pd.get_dummies(bees.genus)
 
-training_rows = range(0,3000)
-test_rows = range(3000,3969)
+#training_rows = range(0,3000)
+#test_rows = range(3000,3969)
+training_rows = range(0,300)
+test_rows = range(301,399)
 
 X_test = np.concatenate([arr[np.newaxis] for arr in bees.images.loc[test_rows]/256.])
 
